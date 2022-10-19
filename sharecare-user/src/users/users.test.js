@@ -103,6 +103,15 @@ test('Should list all users', async () => {
 test('Should return a specific user', async () => {
     
     // TO BE IMPLEMENTED
+    const req = expressMock.getMockReq({ body: user });
+    const { res, next, mockClear } = expressMock.getMockRes()
+
+    await usersController.createUser(req, res);
+    
+    const conn = typeorm.getConnection();
+    const outUsers = await conn.getRepository("User").find();
+    expect(res.status).toBeCalledWith(200);
+    console.log(outUsers);
 
 });
 
