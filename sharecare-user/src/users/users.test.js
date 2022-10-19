@@ -110,22 +110,26 @@ let usersController = UsersController();
 id: 1,
 firstName: 'Rich',
 lastName: 'Marko',
-email: 'hello@prisma.io',
+eMail: 'hello@prisma.io',
 password: 'blabla',
 age: 34
 }
 ];
 
-    const req = expressMock.getMockReq({ body: user });
+
+
+    const conn = typeorm.getConnection();
+    userRepo = await conn.getRepository("User")
+    result = await userRepo.create(users);
+    await userRepo.save(result);
+
+    const req = expressMock.getMockReq({params:{id:1} });
     const { res, next, mockClear } = expressMock.getMockRes()
 
-    await usersController.createUser(req, res);
-    
-    const conn = typeorm.getConnection();
-    const outUsers = await conn.getRepository("User").find();
-    expect(res.status).toBeCalledWith(200);
-    console.log(outUsers);
+    await usersController.getUserById(req, res);
 
+    expect(res.status).toBeCalledWith(200);
+    expect(res.json).toBeCalledWith(users);
 });
 
 test('Should update a specific user', async () => {
@@ -192,28 +196,35 @@ const users = [
 {
 	id: 1,
 firstName:'Marko',
-lastNamr: 'someone',
-email: 'hello@prisma.io'
+lastName: 'someone',
+eMail: 'hello@prisma.io',
+password: 'bababa',
+age: 36
 },
-{
-	id: 2,
-firstName: 'Gillian',
-lastName: 'Smith',
-email: 'hello@prisma.io'
 
-}
 ];
- const req = expressMock.getMockReq({ body: user });
-    const { res, next, mockClear } = expressMock.getMockRes()
 
+const user ={
+        id: 1,
+firstName:'Marko',
+lastName: 'someone',
+eMail: 'hello@prisma.io',
+password: 'bababa',
+age: 36
+};
+
+// prepare the reality in the database
+    const conn = typeorm.getConnection();
+    userRepo = await conn.getRepository("User")
+    result = await userRepo.create(users);
+    await userRepo.save(result);
+
+ const req = expressMock.getMockReq({params:{id:1} , body:user});
+    const { res, next, mockClear } = expressMock.getMockRes()  
     await usersController.deleteUser(req, res);
 
-    const conn = typeorm.getConnection();
     const outUsers = await conn.getRepository("User").find();
     expect(res.status).toBeCalledWith(200);
-    console.log("deleted");
-console.log(outUsers);
-
-
+    expect(outUsers.length).toBe(0);
 });
 
