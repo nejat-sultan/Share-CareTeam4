@@ -119,7 +119,7 @@ age: 34
     const req = expressMock.getMockReq({ body: user });
     const { res, next, mockClear } = expressMock.getMockRes()
 
-    await usersController.createUser(req, res);
+    await usersController.getUserById(req, res);
     
     const conn = typeorm.getConnection();
     const outUsers = await conn.getRepository("User").find();
@@ -211,9 +211,5 @@ email: 'hello@prisma.io'
     const conn = typeorm.getConnection();
     const outUsers = await conn.getRepository("User").find();
     expect(res.status).toBeCalledWith(200);
-    console.log("deleted");
-console.log(outUsers);
-
-
 });
 
