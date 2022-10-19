@@ -203,17 +203,10 @@ email: 'hello@prisma.io'
 
 }
 ];
- const req = expressMock.getMockReq({ body: user });
-    const { res, next, mockClear } = expressMock.getMockRes()
 
-    await usersController.deleteUser(req, res);
-
-    const conn = typeorm.getConnection();
-    const outUsers = await conn.getRepository("User").find();
-    expect(res.status).toBeCalledWith(200);
-    console.log("deleted");
-console.log(outUsers);
-
+const deleteUser = async(req, res)=>{
+const
+}
 
 });
 
