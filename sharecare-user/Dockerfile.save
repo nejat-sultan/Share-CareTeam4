@@ -1,0 +1,25 @@
+FROM node:12-alpine
+
+ENV name=user
+
+LABEL org.opencontainers.image.title="image" \
+      org.opencontainers.image.title="image" \
+      org.opencontainers.image.title="image" \    
+      org.opencontainers.image.title="image" \
+
+RUN apk --no-cache add \
+  curl \
+  ca-certificates \
+  jq \
+  less \
+  vim 
+
+COPY . /sharecare-user
+WORKDIR /sharecare-user
+RUN npm install
+
+EXPOSE 3000
+CMD npm start
+
+
+
